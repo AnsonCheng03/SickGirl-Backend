@@ -67,38 +67,38 @@ const Chat = ({
 
   // automatically scroll to bottom of chat
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  };
-  useEffect(() => {
-    scrollToBottom();
-  }, [messages]);
+  // const scrollToBottom = () => {
+  //   messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  // };
+  // useEffect(() => {
+  //   scrollToBottom();
+  // }, [messages]);
 
   // create a new threadID when chat component created
-  useEffect(() => {
-    const createThread = async () => {
-      const res = await fetch(`/api/assistants/threads`, {
-        method: "POST",
-      });
-      const data = await res.json();
-      setThreadId(data.threadId);
-    };
-    createThread();
-  }, []);
+  // useEffect(() => {
+  //   const createThread = async () => {
+  //     const res = await fetch(`/api/assistants/threads`, {
+  //       method: "POST",
+  //     });
+  //     const data = await res.json();
+  //     setThreadId(data.threadId);
+  //   };
+  //   createThread();
+  // }, []);
 
-  const sendMessage = async (text) => {
-    const response = await fetch(
-      `/api/assistants/threads/${threadId}/messages`,
-      {
-        method: "POST",
-        body: JSON.stringify({
-          content: text,
-        }),
-      }
-    );
-    const stream = AssistantStream.fromReadableStream(response.body);
-    handleReadableStream(stream);
-  };
+  // const sendMessage = async (text) => {
+  //   const response = await fetch(
+  //     `/api/assistants/threads/${threadId}/messages`,
+  //     {
+  //       method: "POST",
+  //       body: JSON.stringify({
+  //         content: text,
+  //       }),
+  //     }
+  //   );
+  //   const stream = AssistantStream.fromReadableStream(response.body);
+  //   handleReadableStream(stream);
+  // };
 
   const submitActionResult = async (runId, toolCallOutputs) => {
     const response = await fetch(
@@ -118,95 +118,95 @@ const Chat = ({
     handleReadableStream(stream);
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (!userInput.trim()) return;
-    sendMessage(userInput);
-    setMessages((prevMessages) => [
-      ...prevMessages,
-      { role: "user", text: userInput },
-    ]);
-    setUserInput("");
-    setInputDisabled(true);
-    scrollToBottom();
-  };
+  // const handleSubmit = (e) => {
+  // e.preventDefault();
+  // if (!userInput.trim()) return;
+  // sendMessage(userInput);
+  // setMessages((prevMessages) => [
+  //   ...prevMessages,
+  //   { role: "user", text: userInput },
+  // ]);
+  // setUserInput("");
+  // setInputDisabled(true);
+  // scrollToBottom();
+  // };
 
   /* Stream Event Handlers */
 
   // textCreated - create new assistant message
-  const handleTextCreated = () => {
-    appendMessage("assistant", "");
-  };
+  // const handleTextCreated = () => {
+  //   appendMessage("assistant", "");
+  // };
 
-  // textDelta - append text to last assistant message
-  const handleTextDelta = (delta) => {
-    if (delta.value != null) {
-      appendToLastMessage(delta.value);
-    };
-    if (delta.annotations != null) {
-      annotateLastMessage(delta.annotations);
-    }
-  };
+  // // textDelta - append text to last assistant message
+  // const handleTextDelta = (delta) => {
+  //   if (delta.value != null) {
+  //     appendToLastMessage(delta.value);
+  //   }
+  //   if (delta.annotations != null) {
+  //     annotateLastMessage(delta.annotations);
+  //   }
+  // };
 
-  // imageFileDone - show image in chat
-  const handleImageFileDone = (image) => {
-    appendToLastMessage(`\n![${image.file_id}](/api/files/${image.file_id})\n`);
-  }
+  // // imageFileDone - show image in chat
+  // const handleImageFileDone = (image) => {
+  //   appendToLastMessage(`\n![${image.file_id}](/api/files/${image.file_id})\n`);
+  // };
 
-  // toolCallCreated - log new tool call
-  const toolCallCreated = (toolCall) => {
-    if (toolCall.type != "code_interpreter") return;
-    appendMessage("code", "");
-  };
+  // // toolCallCreated - log new tool call
+  // const toolCallCreated = (toolCall) => {
+  //   if (toolCall.type != "code_interpreter") return;
+  //   appendMessage("code", "");
+  // };
 
-  // toolCallDelta - log delta and snapshot for the tool call
-  const toolCallDelta = (delta, snapshot) => {
-    if (delta.type != "code_interpreter") return;
-    if (!delta.code_interpreter.input) return;
-    appendToLastMessage(delta.code_interpreter.input);
-  };
+  // // toolCallDelta - log delta and snapshot for the tool call
+  // const toolCallDelta = (delta, snapshot) => {
+  //   if (delta.type != "code_interpreter") return;
+  //   if (!delta.code_interpreter.input) return;
+  //   appendToLastMessage(delta.code_interpreter.input);
+  // };
 
-  // handleRequiresAction - handle function call
-  const handleRequiresAction = async (
-    event: AssistantStreamEvent.ThreadRunRequiresAction
-  ) => {
-    const runId = event.data.id;
-    const toolCalls = event.data.required_action.submit_tool_outputs.tool_calls;
-    // loop over tool calls and call function handler
-    const toolCallOutputs = await Promise.all(
-      toolCalls.map(async (toolCall) => {
-        const result = await functionCallHandler(toolCall);
-        return { output: result, tool_call_id: toolCall.id };
-      })
-    );
-    setInputDisabled(true);
-    submitActionResult(runId, toolCallOutputs);
-  };
+  // // handleRequiresAction - handle function call
+  // const handleRequiresAction = async (
+  //   event: AssistantStreamEvent.ThreadRunRequiresAction
+  // ) => {
+  //   const runId = event.data.id;
+  //   const toolCalls = event.data.required_action.submit_tool_outputs.tool_calls;
+  //   // loop over tool calls and call function handler
+  //   const toolCallOutputs = await Promise.all(
+  //     toolCalls.map(async (toolCall) => {
+  //       const result = await functionCallHandler(toolCall);
+  //       return { output: result, tool_call_id: toolCall.id };
+  //     })
+  //   );
+  //   setInputDisabled(true);
+  //   submitActionResult(runId, toolCallOutputs);
+  // };
 
-  // handleRunCompleted - re-enable the input form
-  const handleRunCompleted = () => {
-    setInputDisabled(false);
-  };
+  // // handleRunCompleted - re-enable the input form
+  // const handleRunCompleted = () => {
+  //   setInputDisabled(false);
+  // };
 
-  const handleReadableStream = (stream: AssistantStream) => {
-    // messages
-    stream.on("textCreated", handleTextCreated);
-    stream.on("textDelta", handleTextDelta);
+  // const handleReadableStream = (stream: AssistantStream) => {
+  //   // messages
+  //   stream.on("textCreated", handleTextCreated);
+  //   stream.on("textDelta", handleTextDelta);
 
-    // image
-    stream.on("imageFileDone", handleImageFileDone);
+  //   // image
+  //   stream.on("imageFileDone", handleImageFileDone);
 
-    // code interpreter
-    stream.on("toolCallCreated", toolCallCreated);
-    stream.on("toolCallDelta", toolCallDelta);
+  //   // code interpreter
+  //   stream.on("toolCallCreated", toolCallCreated);
+  //   stream.on("toolCallDelta", toolCallDelta);
 
-    // events without helpers yet (e.g. requires_action and run.done)
-    stream.on("event", (event) => {
-      if (event.event === "thread.run.requires_action")
-        handleRequiresAction(event);
-      if (event.event === "thread.run.completed") handleRunCompleted();
-    });
-  };
+  //   // events without helpers yet (e.g. requires_action and run.done)
+  //   stream.on("event", (event) => {
+  //     if (event.event === "thread.run.requires_action")
+  //       handleRequiresAction(event);
+  //     if (event.event === "thread.run.completed") handleRunCompleted();
+  //   });
+  // };
 
   /*
     =======================
@@ -214,39 +214,38 @@ const Chat = ({
     =======================
   */
 
-  const appendToLastMessage = (text) => {
-    setMessages((prevMessages) => {
-      const lastMessage = prevMessages[prevMessages.length - 1];
-      const updatedLastMessage = {
-        ...lastMessage,
-        text: lastMessage.text + text,
-      };
-      return [...prevMessages.slice(0, -1), updatedLastMessage];
-    });
-  };
+  // const appendToLastMessage = (text) => {
+  //   setMessages((prevMessages) => {
+  //     const lastMessage = prevMessages[prevMessages.length - 1];
+  //     const updatedLastMessage = {
+  //       ...lastMessage,
+  //       text: lastMessage.text + text,
+  //     };
+  //     return [...prevMessages.slice(0, -1), updatedLastMessage];
+  //   });
+  // };
 
-  const appendMessage = (role, text) => {
-    setMessages((prevMessages) => [...prevMessages, { role, text }]);
-  };
+  // const appendMessage = (role, text) => {
+  //   setMessages((prevMessages) => [...prevMessages, { role, text }]);
+  // };
 
-  const annotateLastMessage = (annotations) => {
-    setMessages((prevMessages) => {
-      const lastMessage = prevMessages[prevMessages.length - 1];
-      const updatedLastMessage = {
-        ...lastMessage,
-      };
-      annotations.forEach((annotation) => {
-        if (annotation.type === 'file_path') {
-          updatedLastMessage.text = updatedLastMessage.text.replaceAll(
-            annotation.text,
-            `/api/files/${annotation.file_path.file_id}`
-          );
-        }
-      })
-      return [...prevMessages.slice(0, -1), updatedLastMessage];
-    });
-    
-  }
+  // const annotateLastMessage = (annotations) => {
+  //   setMessages((prevMessages) => {
+  //     const lastMessage = prevMessages[prevMessages.length - 1];
+  //     const updatedLastMessage = {
+  //       ...lastMessage,
+  //     };
+  //     annotations.forEach((annotation) => {
+  //       if (annotation.type === "file_path") {
+  //         updatedLastMessage.text = updatedLastMessage.text.replaceAll(
+  //           annotation.text,
+  //           `/api/files/${annotation.file_path.file_id}`
+  //         );
+  //       }
+  //     });
+  //     return [...prevMessages.slice(0, -1), updatedLastMessage];
+  //   });
+  // };
 
   return null;
   // <div className={styles.chatContainer}>
