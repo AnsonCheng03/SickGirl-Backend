@@ -248,35 +248,34 @@ const Chat = ({
     
   }
 
-  return (
-    <div className={styles.chatContainer}>
-      <div className={styles.messages}>
-        {messages.map((msg, index) => (
-          <Message key={index} role={msg.role} text={msg.text} />
-        ))}
-        <div ref={messagesEndRef} />
-      </div>
-      <form
-        onSubmit={handleSubmit}
-        className={`${styles.inputForm} ${styles.clearfix}`}
-      >
-        <input
-          type="text"
-          className={styles.input}
-          value={userInput}
-          onChange={(e) => setUserInput(e.target.value)}
-          placeholder="Enter your question"
-        />
-        <button
-          type="submit"
-          className={styles.button}
-          disabled={inputDisabled}
-        >
-          Send
-        </button>
-      </form>
-    </div>
-  );
+  return null;
+  // <div className={styles.chatContainer}>
+  //   <div className={styles.messages}>
+  //     {messages.map((msg, index) => (
+  //       <Message key={index} role={msg.role} text={msg.text} />
+  //     ))}
+  //     <div ref={messagesEndRef} />
+  //   </div>
+  //   <form
+  //     onSubmit={handleSubmit}
+  //     className={`${styles.inputForm} ${styles.clearfix}`}
+  //   >
+  //     <input
+  //       type="text"
+  //       className={styles.input}
+  //       value={userInput}
+  //       onChange={(e) => setUserInput(e.target.value)}
+  //       placeholder="Enter your question"
+  //     />
+  //     <button
+  //       type="submit"
+  //       className={styles.button}
+  //       disabled={inputDisabled}
+  //     >
+  //       Send
+  //     </button>
+  //   </form>
+  // </div>
 };
 
 export default Chat;
