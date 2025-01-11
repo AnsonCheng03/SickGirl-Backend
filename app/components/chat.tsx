@@ -100,23 +100,23 @@ const Chat = ({
   //   handleReadableStream(stream);
   // };
 
-  const submitActionResult = async (runId, toolCallOutputs) => {
-    const response = await fetch(
-      `/api/assistants/threads/${threadId}/actions`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          runId: runId,
-          toolCallOutputs: toolCallOutputs,
-        }),
-      }
-    );
-    const stream = AssistantStream.fromReadableStream(response.body);
-    handleReadableStream(stream);
-  };
+  // const submitActionResult = async (runId, toolCallOutputs) => {
+  //   const response = await fetch(
+  //     `/api/assistants/threads/${threadId}/actions`,
+  //     {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify({
+  //         runId: runId,
+  //         toolCallOutputs: toolCallOutputs,
+  //       }),
+  //     }
+  //   );
+  //   const stream = AssistantStream.fromReadableStream(response.body);
+  //   handleReadableStream(stream);
+  // };
 
   // const handleSubmit = (e) => {
   // e.preventDefault();
