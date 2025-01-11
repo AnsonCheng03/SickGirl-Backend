@@ -16,13 +16,6 @@ const Home = () => {
       <div className={styles.title}>
         Explore sample apps built with Assistants API
       </div>
-      <div className={styles.container}>
-        {Object.entries(categories).map(([name, url]) => (
-          <a key={name} className={styles.category} href={`/examples/${url}`}>
-            {name}
-          </a>
-        ))}
-      </div>
     </main>
   );
 };

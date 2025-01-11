@@ -1,5 +1,6 @@
 import { AssistantStream } from "openai/lib/AssistantStream";
 import { AssistantStreamEvent } from "openai/resources/beta/assistants";
+import { openai } from "@/app/openai";
 
 type MessageProps = {
   role: "user" | "assistant" | "code";
@@ -56,17 +57,11 @@ const submitActionResult = async (
   threadId,
   messageList
 ) => {
-  const response = await fetch(`/api/assistants/threads/${threadId}/actions`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      runId: runId,
-      toolCallOutputs: toolCallOutputs,
-    }),
-  });
-  const stream = AssistantStream.fromReadableStream(response.body);
+  const stream = openai.beta.threads.runs.submitToolOutputsStream(
+    threadId,
+    runId,
+    { tool_outputs: toolCallOutputs }
+  );
   handleReadableStream(stream, threadId, messageList);
 };
 
