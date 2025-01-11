@@ -13,7 +13,7 @@ export const sendMessage = async (content, threadId, messageList) => {
   const stream = openai.beta.threads.runs.stream(threadId, {
     assistant_id: assistantId,
   });
-  await handleReadableStream(stream, threadId, messageList);
+  return await handleReadableStream(stream, threadId, messageList);
 };
 
 export const createThread = async () => {

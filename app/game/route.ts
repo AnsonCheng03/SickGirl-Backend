@@ -17,13 +17,25 @@ export async function POST(req, res) {
   const request = await req.json();
   const userInput = request.userInput;
   const threadId = request.threadId || (await createThread());
+  const returnLastMessageOnly = request.returnLastMessageOnly || false;
+  console.log("threadId", threadId);
 
   const messageList = [];
 
   messageList.push({ role: "user", text: userInput });
   await sendMessage(userInput, threadId, messageList);
-  return new Response(JSON.stringify({ messageList }), {
-    status: 200,
-    headers: { "Content-Type": "application/json" },
-  });
+  return new Response(
+    returnLastMessageOnly
+      ? JSON.stringify({
+          threadId,
+          message: messageList[messageList.length - 1].text,
+        })
+      : JSON.stringify({ threadId, messageList }),
+    {
+      status: 200,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+  );
 }
